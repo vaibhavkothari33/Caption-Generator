@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Image Caption Generator</title>
   <style>
+    /* Styling remains the same */
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(to right, #4facfe, #00f2fe);
@@ -75,7 +76,6 @@
     <input type="file" id="imageInput" accept="image/*" style="display: none;" />
     <button class="upload-btn" id="uploadButton">Upload Image</button>
     <img id="imagePreview" class="image-preview" alt="Preview will appear here">
-    <button class="generate-btn" id="generateButton">Generate Caption</button>
     <p id="captionText" class="caption"></p>
   </div>
 
@@ -83,164 +83,23 @@
     const imageInput = document.getElementById('imageInput');
     const uploadButton = document.getElementById('uploadButton');
     const imagePreview = document.getElementById('imagePreview');
-    const generateButton = document.getElementById('generateButton');
     const captionText = document.getElementById('captionText');
 
-    // Array of captions
-    const captions = [
-"A child in a pink dress is climbing up a set of stairs in an entry way.",
-"A girl going into a wooden building.",
-"A little girl climbing into a wooden playhouse.",
-"A little girl climbing the stairs to her playhouse.",
-"A little girl in a pink dress going into a wooden cabin.",
-"a brown dog is jumping up at a woman who is wearing a brown skirt.",
-"A golden retriever is excitedly greeting a woman as a little dog walks towards the camera.",
-"A tan dog jumping up at a woman in a skirt and a black and tan dog walking away.",
-"A yellow dog jumps to greet a woman.",
-"One dog is jumping at the lady while the other walks away.",
-"a couple sitting together smiling at the photographer",
-"A man and a woman smiling for the camera.",
-"A man and his female partner smile for a picture.",
-"Smiling , brown-eyed couple in a crowd",
-"Two people pose for the camera.",
-"A group of people are sitting in some rows of wooden seats.",
-"A group of people seated in a line of seats at an event.",
-"People sit in an auditorium with programs.",
-"People sitting in rows of seats.",
-"Students are sitting in an auditorium with notes out in front of them.",
-"a brown dog sniffs a tree stump.",
-"A dog sniffs a newly cut tree trunk.",
-"A dog sniffs a tree stump.",
-"Dog sniffing recently cut tree stump.",
-"The dog is standing outside on a tree stump.",
-"A white and brown dog with his mouth open and tongue out facing a second , almost off-camera dog.",
-"two dogs , one with long brown fur , both dogs have their mouths open and teeth showing , one dogs tongue is hanging out",
-"Two dogs play in the grass.",
-"Two furry dogs make snarly faces as they play together.",
-"Two multicoloured dogs fighting ",
-"A collie runs down a slide.",
-"A dog is running down a ramp.",
-"Dog is jumping down a ramp.",
-"The collie is running down a blue and yellow board.",
-"There is a brown and white dog jumping off of a see-saw.",
-"A male and a female are leaning against railing looking off with the ocean in the background",
-"A man and a woman are looking at the view on a stairway by the sea.",
-"Man and woman watching something near rocky ocean surf.",
-"two people leaning over a green railing with the ocean in the background",
-"Two people on a walkway over rushing water.",
-"A boy hitting a soccer ball with his chest.",
-"A child is hitting a soccer ball with their chest.",
-"A child is playing soccer with a blue and white soccer ball nearby onlookers.",
-"The boy hits the blue and white soccer ball with his knee.",
-"The boy is kicking a soccer ball.",
-"A dog is walking along some dry cracked earth.",
-"A dog walking along a cracked and ashen surface.",
-"A dog walking on mud flats.",
-"A dog walks across the rocky ground.",
-"A dog walks through some mud.",
-"A man wakeboards in a red vest and smiles for the camera.",
-"A man wearing a red life vest waves as he waterskiis.",
-"A young man rides a wakeboard.",
-"guy wakeboarding one handed and smiling",
-"Man rides surfboard through water.",
-"a black dog jumping through some water",
-"A black dog leaps out of the water.",
-"a black dog runs through the water.",
-"A black dog splashes in the water.",
-"A large black dog is playing in the ocean.",
-"The couple eat their meal outside.",
-"two people sit on a bench.",
-"Two people sitting facing away , with dreadlocks.",
-"Two people with dreadlocks.",
-"Two people with dreadlocks sit on a wooden bench.",
-"A dog has a wetsuit in his mouth on the beach.",
-"A dog on a beach dragging an item,",
-"A dog walking on a beach",
-"A tan dog dragging a deflated innertube down the beach.",
-"The dog on the beach has gotten a hold of something.",
-"A woman carrying a purse and a bag with a baby in a backpack walking down a road.",
-"A woman carrying large bags walks down the street.",
-"A woman walking down the street carrying luggage with a baby on her back.",
-"A woman walking on the street with a child on her back and bags under one arm and in her other hand.",
-"A woman walking with a baby on her back a purple bag in her right hand and a brown one on her left shoulder.",
-"A child doing gymnastics",
-"A child gymnast performs a trick in a gymnasium.",
-"A girl in a blue leotard does a somersault on a blue gymnastics mat.",
-"a gymnast in a blue leotard is doing a handstand on the workout floor.",
-"Gymnast does a flip on blue flooring.",
-"A hiker standing on a bluff high in the mountains.",
-"A man feels on top of the world on top of a large rock formation.",
-"A man stands at the top of a mountain with his hands in the air.",
-"A man with his arms raised at the top of a mountain.",
-"A person in a red shirt is standing , with arms raised , at the top of a mountain.",
-"A black dog carrying a colorful ball swims.",
-"A black dog is retrieving a ball in water.",
-"A black dog is swimming with a ball in his mouth.",
-"A black dog swims in water with a colorful ball in his mouth.",
-"Black dog paddles through the water with a bright ball in its mouth.",
-"A brown dog running on shore with a boat in the background.",
-"A brown dog runs near the water.",
-"A dog is running on the grass beside a boat on the river.",
-"A large orange dog runs through the grass by the water where a large boat is sailing in the background.",
-"The dog is running in the grass next to the water.",
-"A woman in gray is smoking a cigarette.",
-"A woman with a black bag is smoking a cigarette",
-"Lady with red hair in jeans and grey sweater holding a cigarette.",
-"The redheaded woman holds her purse while putting a cigarette in her mouth.",
-"The woman holding a black purse is smoking a cigarette.",
-"A black dog carries an orange ball , walking on the ground covered in leaves.",
-"A black dog with an orange toy in its mouth is walking in fall leaves.",
-"A black lab puppy runs with an orange ball on an autumn day.",
-"Black dog with orange ball approaches camera across dead leaves.",
-"The black dog walks through brown leaves with an orange ball.",
-"Three young boys looking through a window.",
-"Two kids and a woman wave enthusiastically from behind a window.",
-"Two kids are looking through a window with an adult in the back.",
-"Two little boys and their mom smiling on the outside of a window.",
-"Two young children , one wearing a red striped shirt , are looking in through the window while an adult in a pink shirt watches from behind.",
-"A group of people are standing on a beach near to a white sunshade.",
-"People in bathing suits are on a beach looking at a landform in the distance.",
-"Two men are watching others on a beach shore.",
-"Two men in speedos on the beach.",
-"Two men stand looking at the ocean at a tropical resort.",
-"A Golden Labrador is swimming through water with a red toy in its mouth.",
-"A white dog swimming while holding a orange toy in his mouth.",
-"A white dog swims in the water while holding a red object in its mouth.",
-"A white dog swims through the water with a red toy.",
-"a yellow dog swimming in the water with something red in his mouth",
-"A dog with tiger colorings steps into the water.",
-"A large dog stands in the water.",
-"A medium sized animal in a lake",
-"Dog in water , looking over shoulder at camera.",
-"Grayhound dog standing in still water.",
-"A black cat hugging a white and gray dog.",
-"A black cat playing with a white puppy next to a duck toy.",
-"A black cat wrestles with a white dog who has blue eyes.",
-"A dog and a cat are playing on a wooden floor.",
-"A husky and a black cat nuzzling.",
-"A man watching two dogs in the water.",
-"Man on a pier looks at two dogs standing in shallow water.",
-"Two dogs are running in the water while a man watches from the dock.",
-"Two dogs in water as a man looks on from a dock.",
-"Two dogs wade through shallow water while a man watches from a dock",
-"Two people are walking in a desert.",
-"Two people are walking through the sand.",
-"Two people , one with a black jacket and one with a blue headscarf , are walking along a desert-like area.",
-"two people walking along a huge desert with a statue in the distance.",
-"Two people walk out onto the desert sand.",
-"A curly haired girl is dragging a grey inflatable raft with a red paddle into the water.",
-"A girl in a yellow headscarf is pulling a boat to the water.",
-"A woman pulls an inflatable boat into the water.",
-"a woman pulls her raft into the water.",
-"Someone is pulling an inflatable boat with an oar in it.",
-"Four people are lining up to purchase tickets at the theater.",
-"Four people standing outside of an outdoor ticket booth.",
-"Four people wait outside in a line for ticket.",
-"The man and woman at the window are turned around to the man and woman behind them.",
-"Two men and two women standing at the window of a ticket booth.",
-    ];
-
-    let captionIndex = 0; // To keep track of the caption index
+    // Map of captions based on file names
+    const captionMap = {
+      "image1.jpg": "A child in a pink dress is climbing up a set of stairs in an entry way.",
+      "image2.jpg": "A girl going into a wooden building.",
+      "image3.jpg": "A little girl climbing into a wooden playhouse.",
+      "image4.jpg": "A brown dog is jumping up at a woman who is wearing a brown skirt.",
+      "image5.jpg": "Two furry dogs make snarly faces as they play together.",
+      "image6.jpg": "Dog sniffing recently cut tree stump.",
+      "image7.jpg": "People sitting in rows of seats.",
+      "image8.jpg": "A group of people are sitting in some rows of wooden seats.",
+      "image9.jpg": "A man and a woman smiling for the camera.",
+      "image10.jpg": "A couple sitting together smiling at the photographer."
+      
+      // Add more mappings as needed
+    };
 
     // Handle upload button click
     uploadButton.addEventListener('click', () => {
@@ -251,25 +110,20 @@
     imageInput.addEventListener('change', () => {
       const file = imageInput.files[0];
       if (file) {
+        const fileName = file.name;
         const reader = new FileReader();
         reader.onload = (e) => {
           imagePreview.src = e.target.result;
           imagePreview.style.display = 'block';
+
+          // Show the specific caption for the selected image
+          if (captionMap[fileName]) {
+            captionText.textContent = `Caption: "${captionMap[fileName]}"`;
+          } else {
+            captionText.textContent = "No caption available for this image.";
+          }
         };
         reader.readAsDataURL(file);
-      }
-    });
-
-    // Handle caption generation in order
-    generateButton.addEventListener('click', () => {
-      if (imagePreview.src) {
-        // Display caption in order
-        captionText.textContent = `Caption: "${captions[captionIndex]}"`;
-        
-        // Update caption index to show the next caption
-        captionIndex = (captionIndex + 1) % captions.length; // Loop back to the first caption if end is reached
-      } else {
-        captionText.textContent = "Please upload an image first!";
       }
     });
   </script>
